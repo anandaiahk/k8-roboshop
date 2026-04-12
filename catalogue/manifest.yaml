@@ -9,7 +9,7 @@ metadata:
     component: catalogue
 data:
   MONGO: "true"
-  MONGO_URL: "mongodb://mongodb:27017/catalogue"  
+  MONGO_URL: "mongodb://mongodb:27017/catalogue"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -39,7 +39,8 @@ spec:
     spec:
       containers:
       - name: catalogue
-        image: anandkoppala/catalogue:1.0.0
+        image: anandkoppala/catalogue:1.4.0
+        imagePullPolicy: Always # safe to pull everytime, there may be images with same version rebuilt and pushed
         resources:
           requests:
             cpu: "100m"
@@ -61,12 +62,10 @@ spec:
             path: /health
             port: 8080
           failureThreshold: 2
-          periodSeconds: 10  
+          periodSeconds: 10
         envFrom:
         - configMapRef:
-          name: catalogue
-
-
+            name: catalogue
 ---
 apiVersion: v1
 kind: Service
@@ -86,4 +85,4 @@ spec:
   ports:
   - protocol: TCP
     port: 8080 # servie port
-    targetPort: 8080 # container port        
+    targetPort: 8080 # container port       
